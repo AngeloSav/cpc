@@ -1,5 +1,6 @@
 \documentclass[12pt,a4paper]{article}
 
+\usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor} % For colors
 
@@ -86,5 +87,9 @@ If we are not in the base case, the function first is recursively called on the 
 \end{itemize}
 
 The public method \textbf{max\_path\_sum} calls the helper on the root of the tree, obtaining the tuple containing \textbf{bp}, the best path from the leaf up to the root, and \textbf{bs}, the max path from leaf to leaf in the entire tree. The value of the \textbf{bs} is returned to the caller.
+
+\subsection*{Generic implementation}
+Generic implementation of the solution is available at \url{https://github.com/AngeloSav/cpc/blob/main/hands_on_1_generic/src/lib.rs}.
+None of the function logic has been changed to make it work, meaning that the algorithms described also work for signed integers.
 
 \end{document}

@@ -1,11 +1,11 @@
 pub struct Node {
-    key: i32,
+    key: u32,
     id_left: Option<usize>,
     id_right: Option<usize>,
 }
 
 impl Node {
-    fn new(key: i32) -> Self {
+    fn new(key: u32) -> Self {
         Self {
             key,
             id_left: None,
@@ -19,7 +19,7 @@ pub struct Tree {
 }
 
 impl Tree {
-    pub fn with_root(key: i32) -> Self {
+    pub fn with_root(key: u32) -> Self {
         Self {
             nodes: vec![Node::new(key)],
         }
@@ -32,7 +32,7 @@ impl Tree {
     /// # Panics
     /// Panics if the `parent_id` does not exist, or if the node `parent_id` has  
     /// the child already set.
-    pub fn add_node(&mut self, parent_id: usize, key: i32, is_left: bool) -> usize {
+    pub fn add_node(&mut self, parent_id: usize, key: u32, is_left: bool) -> usize {
         assert!(
             parent_id < self.nodes.len(),
             "Parent node id does not exist"
@@ -64,13 +64,13 @@ impl Tree {
     }
 
     /// Returns the sum of all the keys in the tree
-    pub fn sum(&self) -> i32 {
+    pub fn sum(&self) -> u32 {
         self.rec_sum(Some(0))
     }
 
     /// A private recursive function that computes the sum of
     /// nodes in the subtree rooted at `node_id`.
-    fn rec_sum(&self, node_id: Option<usize>) -> i32 {
+    fn rec_sum(&self, node_id: Option<usize>) -> u32 {
         if let Some(id) = node_id {
             assert!(id < self.nodes.len(), "Node id is out of range");
             let node = &self.nodes[id];
@@ -94,7 +94,7 @@ impl Tree {
     /// private method that recursively checks that the keys of a node and its chiledren
     /// respect the bst property and its subtrees do too
     /// It returns a triple (is_bst, min value in the tree, max value in the tree)
-    fn is_bst_rec(&self, node_id: Option<usize>) -> (bool, i32, i32) {
+    fn is_bst_rec(&self, node_id: Option<usize>) -> (bool, u32, u32) {
         match node_id {
             Some(node_id) => {
                 let cur_node = &self.nodes[node_id];
@@ -123,13 +123,13 @@ impl Tree {
                 )
             }
             //base case
-            None => (true, i32::MAX, i32::MIN),
+            None => (true, u32::MAX, u32::MIN),
         }
     }
 
     /// Returns the maximum path sum between to special nodes
     /// A special node is a node which is connected to exactly one different node.
-    pub fn max_path_sum(&self) -> i32 {
+    pub fn max_path_sum(&self) -> u32 {
         // Return the best solution we found,
         // we can safely unwrap because we know that the tree has always at least one node (the root)
         self.max_path_sum_rec(Some(0)).1.unwrap()
@@ -137,7 +137,7 @@ impl Tree {
 
     /// Private method that recursively calculates the maximum path sum in a subtree rooted in `node_id`
     /// It returns a pair (max path from leaf to root, best solution so far)
-    fn max_path_sum_rec(&self, node_id: Option<usize>) -> (i32, Option<i32>) {
+    fn max_path_sum_rec(&self, node_id: Option<usize>) -> (u32, Option<u32>) {
         match node_id {
             Some(node_id) => {
                 let cur_node = &self.nodes[node_id];
@@ -211,7 +211,7 @@ mod tests {
         tree.add_node(0, 90, false);
         assert_eq!(tree.is_bst(), true);
 
-        tree.add_node(1, i32::MAX, false);
+        tree.add_node(1, u32::MAX, false);
         assert_eq!(tree.is_bst(), false);
     }
 
@@ -233,14 +233,13 @@ mod tests {
     }
 
     #[test]
-    // test 1 from link in the course webpage
     fn test_max_path_sum_2() {
         let mut tree = Tree::with_root(3);
 
         tree.add_node(0, 4, true); // id 1
         tree.add_node(0, 5, false); // id 2
 
-        tree.add_node(1, -10, true);
+        tree.add_node(1, 2, true);
         tree.add_node(1, 4, false);
 
         // tree.add_node(2, 20, true);
@@ -250,18 +249,17 @@ mod tests {
     }
 
     #[test]
-    // test 2 from link in the course webpage
     fn test_max_path_sum_3() {
-        let mut tree = Tree::with_root(-15i32);
+        let mut tree = Tree::with_root(0);
 
         tree.add_node(0, 5, true); // id 1
         tree.add_node(0, 6, false); // id 2
 
-        tree.add_node(1, -8, true); // 3
+        tree.add_node(1, 8, true); // 3
         tree.add_node(1, 1, false);
 
         tree.add_node(3, 2, true);
-        tree.add_node(3, -3, false);
+        tree.add_node(3, 3, false);
 
         tree.add_node(2, 3, true);
         tree.add_node(2, 9, false);
@@ -269,11 +267,11 @@ mod tests {
         tree.add_node(8, 0, false);
 
         tree.add_node(9, 4, true);
-        tree.add_node(9, -1, false);
+        tree.add_node(9, 1, false);
 
         tree.add_node(11, 10, true);
 
-        assert_eq!(tree.max_path_sum(), 27);
+        assert_eq!(tree.max_path_sum(), 42);
         assert_eq!(tree.is_bst(), false);
     }
 
@@ -283,11 +281,15 @@ mod tests {
 
         tree.add_node(0, 2, true); // id 1
 
-        tree.add_node(1, 1, false); // 3
+        tree.add_node(1, 1, false); // 2
         assert_eq!(tree.max_path_sum(), 5);
 
-        tree.add_node(1, 3, true); // 4
+        tree.add_node(1, 3, true); // 3
         assert_eq!(tree.max_path_sum(), 7);
+
+        tree.add_node(2, 6, false);
+        assert_eq!(tree.max_path_sum(), 12);
+
         assert_eq!(tree.is_bst(), false);
     }
 }
