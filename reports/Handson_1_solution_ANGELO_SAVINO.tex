@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor} % For colors
+\usepackage[textheight=8in]{geometry}
 
 % Define colors for syntax highlighting
 \definecolor{keywordcolor}{rgb}{0.5, 0.0, 0.5}
@@ -50,14 +51,15 @@
 
 \section*{Exercise 1}
 The first exercise requires us to create a method that, given a tree, returns true if it is a bst.
+
 We first define a helper method \textbf{is\_bst\_rec} that takes as input an Option containing a node\_id and returns a triple \textbf{(is\_bst, max, min)}. 
 
-The base case of this function is when it receives \textbf{None}, in that case we return \textbf{(true, u32::MIN, u32::MAX)}.
+The base case of this function is when it receives \textbf{None}, in that case we return \textbf{(true, u32::MIN, u32::MAX)}, as the empty tree is a BST, and u32::MIN and u32::MAX are respectively smaller and bigger than all numbers that can be represented using 32 bits, which will be useful when combining the results one level higher in the recusrsion.
 
-This function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
+If we are not in the base case, the function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
 
 \begin{itemize}
-    \item is\_bst is true if both the left and right subtrees are BSTs \textbf{and} if the max value in the left subtree is less or equal than the key in the node of node\_id \textbf{and} if the min value in the right subtree is greater than the key in the node of node\_id.
+    \item \textbf{is\_bst} is true if both the left and right subtrees are BSTs \textbf{and} if the max value in the left subtree is less or equal than the key in the node of node\_id \textbf{and} if the min value in the right subtree is greater than the key in the node of node\_id, otherwise id set to false.
     \item max is the maximum value between the max in the subtrees and the key of the current node.
     \item min is the minimum value between the min in the subtrees and the key of the current node.
 \end{itemize}
@@ -68,25 +70,25 @@ The public method \textbf{is\_bst} calls the helper on the root of the tree, obt
 \section*{Exercise 2}
 The text of the second exercise is the following:
 
-\textit{Given a binary tree in which each node element contains a number. Find the maximum possible path sum from one special node to another special node.
-Note: Here special node is a node which is connected to exactly one different node.}
+\textit{"Given a binary tree in which each node element contains a number. Find the maximum possible path sum from one special node to another special node.
+Note: Here special node is a node which is connected to exactly one different node."}
 
 This is equivalent of finding the best path between two leaves, except for when the root has only one of the two childs. In that case the root is also a \textit{special node} and thus a path from leaf to the root is an admissible solution. 
 
 In the same fashion of the first exercise, most of the computation will be done in a private helper and the public function will only be responsible for unwrapping the output and returning the correct value to the caller.
 
-The private helper \textbf{max\_path\_sum\_rec} is defined as taking as input an Option containing a node\_id and returning a tuple \textbf{(bp, bs)}, where \textbf{bp} is the maximum path from a leaf to the node with \textbf{node\_id} and \textbf{bs} is the maximum path from leaf to leaf for a given subtree rooted in the node \textbf{node\_id}, \textbf{bs} is an Option because in the base case (the empty tree) such a path does not exist.
+The private helper \textbf{max\_path\_sum\_rec} is defined as taking as input an Option containing a node\_id and returning a tuple \textbf{(bp, bs)}, where \textbf{bp} is the maximum path from a leaf to the node with \textbf{node\_id} and \textbf{bs} is the maximum path from leaf to leaf for a given subtree rooted in the node \textbf{node\_id}. The field \textbf{bs} is wrapped in an Option because in the base case (the empty tree) such a path does not exist.
 
-The base case of this function is when it receives \textbf{None} (meaning an empty tree), in that case we return \textbf{(0, None)}.
+The base case of this function is when it receives \textbf{None}, in that case we return the pair \textbf{(0, None)}.
 
 If we are not in the base case, the function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
 
 \begin{itemize}
     \item \textbf{bp} is the maximum between the best paths of the subtrees, plus the value of the current node key.
-    \item \textbf{bs} is the maximum between the best possible solutions of the two subtrees (if there are any), and the best possible solution of the current subtree roooted in \textbf{node\_id} which is given by the sum of the best possible paths in the left and right subtree, plus the current node key. 
+    \item \textbf{bs} is the maximum between the best possible solutions of the two subtrees (if there are any), and the best possible solution passing through the current node, which is given by the sum of the best possible paths in the left and right subtree, plus the current node key. 
 \end{itemize}
 
-The public method \textbf{max\_path\_sum} calls the helper on the root of the tree, obtaining the tuple containing \textbf{bp}, the best path from the leaf up to the root, and \textbf{bs}, the max path from leaf to leaf in the entire tree. The value of the \textbf{bs} is returned to the caller.
+The public method \textbf{max\_path\_sum} calls the helper on the root of the tree, obtaining the tuple containing \textbf{bp}, the best path from the leaf up to the root, and \textbf{bs}, the max path from leaf to leaf in the entire tree. The value of the \textbf{bs} is unwrapped and then returned to the caller.
 
 \subsection*{Generic implementation}
 Generic implementation of the solution is available at \url{https://github.com/AngeloSav/cpc/blob/main/hands_on_1_generic/src/lib.rs}.
