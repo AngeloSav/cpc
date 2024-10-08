@@ -1,0 +1,90 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{listings}
+\usepackage{xcolor} % For colors
+
+% Define colors for syntax highlighting
+\definecolor{keywordcolor}{rgb}{0.5, 0.0, 0.5}
+\definecolor{stringcolor}{rgb}{0.2, 0.6, 0.2}
+\definecolor{commentcolor}{rgb}{0.5, 0.5, 0.5}
+
+% Custom Rust language setup
+\lstdefinelanguage{Rust}{
+    keywords={fn, let, mut, pub, impl, as, match, enum, struct, self, Self, loop, move, ref, break, continue, if, else, for, in, return, while, use, mod, crate, super, dyn, where, async, await, trait, const, static, type, unsafe},
+    keywordstyle=\color{keywordcolor}\bfseries,
+    ndkeywords={String, Vec, Option, Result, Some, None, Ok, Err, i32, i64, u32, u64, f32, f64, bool, true, false, Box},
+    ndkeywordstyle=\color{keywordcolor}\bfseries,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{commentcolor}\itshape,
+    stringstyle=\color{stringcolor},
+    morestring=[b]",
+    morestring=[b]',
+    sensitive=true
+}
+
+% General listings settings
+\lstset{
+    language=Rust,
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny\color{commentcolor},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
+\title{Hands On 1}
+\author{Angelo Savino}
+
+\begin{document}
+
+\maketitle
+
+\section*{Exercise 1}
+The first exercise requires us to create a method that, given a tree, returns true if it is a bst.
+We first define a helper method \textbf{is\_bst\_rec} that takes as input an Option containing a node\_id and returns a triple \textbf{(is\_bst, max, min)}. 
+
+The base case of this function is when it receives \textbf{None}, in that case we return \textbf{(true, u32::MIN, u32::MAX)}.
+
+This function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
+
+\begin{itemize}
+    \item is\_bst is true if both the left and right subtrees are BSTs \textbf{and} if the max value in the left subtree is less or equal than the key in the node of node\_id \textbf{and} if the min value in the right subtree is greater than the key in the node of node\_id.
+    \item max is the maximum value between the max in the subtrees and the key of the current node.
+    \item min is the minimum value between the min in the subtrees and the key of the current node.
+\end{itemize}
+
+The public method \textbf{is\_bst} calls the helper on the root of the tree, obtaining the triple containing the value of the predicate \textbf{is\_bst} and the minimum and maximum values contained in the tree. The value of the predicate \textbf{is\_bst} is returned to the caller.
+
+\pagebreak
+\section*{Exercise 2}
+The text of the second exercise is the following:
+
+\textit{Given a binary tree in which each node element contains a number. Find the maximum possible path sum from one special node to another special node.
+Note: Here special node is a node which is connected to exactly one different node.}
+
+This is equivalent of finding the best path between two leaves, except for when the root has only one of the two childs. In that case the root is also a \textit{special node} and thus a path from leaf to the root is an admissible solution. 
+
+In the same fashion of the first exercise, most of the computation will be done in a private helper and the public function will only be responsible for unwrapping the output and returning the correct value to the caller.
+
+The private helper \textbf{max\_path\_sum\_rec} is defined as taking as input an Option containing a node\_id and returning a tuple \textbf{(bp, bs)}, where \textbf{bp} is the maximum path from a leaf to the node with \textbf{node\_id} and \textbf{bs} is the maximum path from leaf to leaf for a given subtree rooted in the node \textbf{node\_id}, \textbf{bs} is an Option because in the base case (the empty tree) such a path does not exist.
+
+The base case of this function is when it receives \textbf{None} (meaning an empty tree), in that case we return \textbf{(0, None)}.
+
+If we are not in the base case, the function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
+
+\begin{itemize}
+    \item \textbf{bp} is the maximum between the best paths of the subtrees, plus the value of the current node key.
+    \item \textbf{bs} is the maximum between the best possible solutions of the two subtrees (if there are any), and the best possible solution of the current subtree roooted in \textbf{node\_id} which is given by the sum of the best possible paths in the left and right subtree, plus the current node key. 
+\end{itemize}
+
+The public method \textbf{max\_path\_sum} calls the helper on the root of the tree, obtaining the tuple containing \textbf{bp}, the best path from the leaf up to the root, and \textbf{bs}, the max path from leaf to leaf in the entire tree. The value of the \textbf{bs} is returned to the caller.
+
+\end{document}
