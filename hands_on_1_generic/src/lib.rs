@@ -169,12 +169,25 @@ where
     pub fn max_path_sum(&self) -> T {
         // Return the best solution we found,
         // we can safely unwrap because we know that the tree has always at least one node (the root)
-        self.max_path_sum_rec(Some(0)).1.unwrap()
+        let root_id = 0;
+        let left_id = self.nodes[root_id].id_left;
+        let right_id = self.nodes[root_id].id_right;
+
+        let res_root = self.max_path_sum_rec(Some(root_id));
+        let res_left = self.max_path_sum_rec(left_id);
+        let res_right = self.max_path_sum_rec(right_id);
+
+        // check if root is a valid special node
+        match (res_left.0, res_right.0) {
+            (None, None) => unreachable!(),
+            (Some(_), None) | (None, Some(_)) => res_root.0.max(res_root.1).unwrap(),
+            (Some(_), Some(_)) => res_root.1.unwrap(),
+        }
     }
 
     /// Private method that recursively calculates the maximum path sum in a subtree rooted in `node_id`
     /// It returns a pair (max path from leaf to root, best solution so far)
-    fn max_path_sum_rec(&self, node_id: Option<usize>) -> (T, Option<T>) {
+    fn max_path_sum_rec(&self, node_id: Option<usize>) -> (Option<T>, Option<T>) {
         match node_id {
             Some(node_id) => {
                 let cur_node = &self.nodes[node_id];
@@ -183,26 +196,39 @@ where
                 let (bpl, bsl) = self.max_path_sum_rec(cur_node.id_left);
                 let (bpr, bsr) = self.max_path_sum_rec(cur_node.id_right);
 
-                // the best candidate solution for this subtree is the best two paths
-                // from leaf to each of the children + the current node key
-                let best_solution_here = bpl + bpr + cur_node.key;
+                //not a valid solution, we update path
+                let best_solution_here;
+                let best_path;
+                if bpl.is_some() && bpr.is_some() {
+                    // the best candidate solution for this subtree is the best two paths
+                    // from leaf to each of the children + the current node key
+                    best_solution_here = Some(bpl.unwrap() + bpr.unwrap() + cur_node.key);
+                    best_path = bpl.unwrap().max(bpr.unwrap());
+                } else {
+                    //we still dont have a valid solution, just calculate best path
+                    best_solution_here = None;
+                    best_path = bpl.unwrap_or(bpr.unwrap_or(T::zero()));
+                }
 
                 // calculate the best solution for this subtree, comparing `best_solution_here`
                 // with the previously found ones (if they exist) and taking the max.
-                let best_sol = match (bsl, bsr) {
-                    (None, None) => best_solution_here,
-                    (Some(x), Some(y)) => *[best_solution_here, x, y].iter().max().unwrap(),
-                    (None, Some(x)) => best_solution_here.max(x),
-                    (Some(x), None) => best_solution_here.max(x),
+                let best_sol = match (best_solution_here, bsl, bsr) {
+                    (x, None, None) => x,
+                    (Some(z), Some(x), Some(y)) => Some(*[z, x, y].iter().max().unwrap()),
+                    (Some(z), None, Some(x)) => Some(z.max(x)),
+                    (Some(z), Some(x), None) => Some(z.max(x)),
+                    (None, Some(x), Some(y)) => Some(x.max(y)),
+                    (None, None, Some(x)) => Some(x),
+                    (None, Some(x), None) => Some(x),
                 };
 
                 //return the best path from a leaf up to the current node and the best solution we found so far
-                (cur_node.key + bpl.max(bpr), Some(best_sol))
+                (Some(cur_node.key + best_path), best_sol)
             }
 
             // base case, the best path from leaf to itself is 0,
             // there is no best solution in the empty tree
-            None => (T::zero(), None),
+            None => (None, None),
         }
     }
 }
@@ -326,5 +352,39 @@ mod tests {
         tree.add_node(1, 3, true); // 4
         assert_eq!(tree.max_path_sum(), 7);
         assert_eq!(tree.is_bst(), false);
+    }
+
+    #[test]
+    fn test_max_path_sum_5() {
+        let mut tree = Tree::with_root(-7);
+
+        tree.add_node(0, -1, true); // id 1
+
+        tree.add_node(1, -2, false); //id 2
+        assert_eq!(tree.max_path_sum(), -10);
+
+        tree.add_node(1, -5, true); // id 3
+        assert_eq!(tree.max_path_sum(), -8);
+        assert_eq!(tree.is_bst(), false);
+    }
+
+    #[test]
+    fn test_max_path_sum_6() {
+        let mut tree = Tree::with_root(-7);
+
+        tree.add_node(0, -1, true);
+
+        tree.add_node(1, -2, false);
+        assert_eq!(tree.max_path_sum(), -10);
+
+        tree.add_node(1, -5, true);
+        assert_eq!(tree.max_path_sum(), -8);
+
+        tree.add_node(0, -5, false);
+
+        tree.add_node(4, 0, false);
+        tree.add_node(4, -1, true);
+
+        assert_eq!(tree.max_path_sum(), -6);
     }
 }

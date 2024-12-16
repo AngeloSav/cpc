@@ -1,0 +1,12 @@
+/home/anglo/uni/cpc/hands_on_2/target/debug/deps/libgetrandom-d978f315dae1aa66.rmeta: /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lib.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error_impls.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util_libc.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/use_file.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lazy.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/linux_android_with_fallback.rs
+
+/home/anglo/uni/cpc/hands_on_2/target/debug/deps/getrandom-d978f315dae1aa66.d: /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lib.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error_impls.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util_libc.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/use_file.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lazy.rs /home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/linux_android_with_fallback.rs
+
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lib.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/error_impls.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/util_libc.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/use_file.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/lazy.rs:
+/home/anglo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/getrandom-0.2.15/src/linux_android_with_fallback.rs:

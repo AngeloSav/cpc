@@ -54,12 +54,12 @@ The first exercise requires us to create a method that, given a tree, returns tr
 
 We first define a helper method \textbf{is\_bst\_rec} that takes as input an Option containing a node\_id and returns a triple \textbf{(is\_bst, max, min)}. 
 
-The base case of this function is when it receives \textbf{None}, in that case we return \textbf{(true, u32::MIN, u32::MAX)}, as the empty tree is a BST, and u32::MIN and u32::MAX are respectively smaller and bigger than all numbers that can be represented using 32 bits, which will be useful when combining the results one level higher in the recusrsion.
+The base case of this function is when it receives \textbf{None}, in that case we return \textbf{(true, u32::MIN, u32::MAX)}, as the empty tree is a BST, and u32::MIN and u32::MAX are respectively smaller and bigger than all numbers that can be represented using 32 bits, which will be useful when combining the results one level higher in the recursion.
 
 If we are not in the base case, the function first is recursively called on the left and right child of the node, then the result of the calls is combined in the following way:
 
 \begin{itemize}
-    \item \textbf{is\_bst} is true if both the left and right subtrees are BSTs \textbf{and} if the max value in the left subtree is less or equal than the key in the node of node\_id \textbf{and} if the min value in the right subtree is greater than the key in the node of node\_id, otherwise id set to false.
+    \item \textbf{is\_bst} is true if both the left and right subtrees are BSTs \textbf{and} if the max value in the left subtree is less or equal than the key in the node of node\_id \textbf{and} if the min value in the right subtree is greater than the key in the node of node\_id, otherwise is set to false.
     \item max is the maximum value between the max in the subtrees and the key of the current node.
     \item min is the minimum value between the min in the subtrees and the key of the current node.
 \end{itemize}
